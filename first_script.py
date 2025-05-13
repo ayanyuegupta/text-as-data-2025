@@ -1,19 +1,12 @@
-import google_auth_oauthlib.flow
-import googleapiclient.discovery
-import googleapiclient.errors
+def greetings(name, country):
+    print(f'Hello, my name is {name} and I am from {country}.')
 
-api_key = 'AIzaSyDcRnH0wEv2zUWqrPkdOaHmMkNKLb6x0ic'
+def main():
+    greetings('John', 'Great Britain')
+    greetings('Monica', 'Italy')
 
-client = googleapiclient.discovery.build('youtube', 'v3', developerKey=api_key)
-request = client.search().list(
-    part='snippet',
-    maxResults=10,
-    q='covid',
-    relevanceLanguage='en'
-)
-
-print(request.execute())
-
+if __name__ == '__main__':
+    main()
 
 
 
