@@ -15,7 +15,7 @@ import os
 
 def preprocess(d, separators=['\n\n', '. ', '.--'], titles=['mr', 'mrs', 'ms', 'dr']):
     
-    ####split into sentences
+    #### split into sentences
     sentences = []
     for k in d:
         text = d[k]['content']

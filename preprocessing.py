@@ -79,7 +79,7 @@ def main():
 
 
     #### 8. SAVING AND LOADING WITH JSON
-    save_dir = '/home/gog/work/text-as-data-2025/data'
+    save_dir = f'{os.getcwd()}/data'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     #### save d as JSON file in save_dir
