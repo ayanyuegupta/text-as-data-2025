@@ -1,12 +1,10 @@
-from tqdm import tqdm
+#from tqdm import tqdm
 import nltk
 nltk.download('punkt')
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import re
-import gensim.downloader as api
-from gensim.test.utils import common_texts
 from gensim.models import Word2Vec
 import gensim
 import json
@@ -41,7 +39,7 @@ def preprocess(d, separators=['\n\n', '. ', '.--'], titles=['mr', 'mrs', 'ms', '
     processed = []
 #    sentences = sentences[:10]
     token_count = 0
-    for s in tqdm(sentences, total=len(sentences)):
+    for s in sentences:
         #### remove new lines
         s = s.replace('\n', ' ')
         
@@ -58,17 +56,10 @@ def preprocess(d, separators=['\n\n', '. ', '.--'], titles=['mr', 'mrs', 'ms', '
         cleaned = []
         for t in tokens:
             t = re.sub(r'[^a-z]', '', t)
-            if (len(t) <= 1) or (t in stop_words): continue
-            cleaned.append(t)
-        
-        #### remove short sentences
-        if len(cleaned) < 3: continue
-        processed.append(cleaned)
+#            if t in stop_words: continue
+            cleaned.append(t) 
         token_count += len(cleaned)
-#        print('####')
-#        print(s)
-#        print(sentences[i])
-#        quit()
+        processed.append(cleaned)
     
     print(f'Total number of tokens: {token_count}')
 
@@ -106,7 +97,7 @@ def main():
 
 
     #### explore similar words
-    words = ['marriage', 'family', 'man', 'woman', 'love']
+    words = ['marriage', 'family', 'man', 'woman', 'love', 'king', 'queen']
     for w in words:
         print('\n####')
         print(w)

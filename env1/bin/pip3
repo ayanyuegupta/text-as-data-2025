@@ -1,4 +1,4 @@
-#!/workspaces/text-as-data-2025/env1/bin/python
+#!/home/gog/work/text-as-data-2025/env1/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys
