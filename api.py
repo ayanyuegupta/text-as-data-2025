@@ -83,7 +83,8 @@ def main():
         os.makedirs(data_dir)
 
     #### create api client
-    api_key = 'AIzaSyDcRnH0wEv2zUWqrPkdOaHmMkNKLb6x0ic'
+    with open('api_key.txt', 'r') as f:
+        api_key = f.read()
     client = googleapiclient.discovery.build('youtube', 'v3', developerKey=api_key)
 
     #### search for youtube videos
