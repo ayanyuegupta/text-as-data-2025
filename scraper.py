@@ -11,62 +11,61 @@ def scrape(url):
     response = requests.get(url)
     
     #### check if request was successful
-    if response.status_code == 200:
-        #### parse html content
-        soup = BeautifulSoup(response.text, 'html.parser')
-#        print(soup)
-#        quit()
-
-        #### get book page links
-        books = soup.find_all('article', class_='product_pod')
-        links = []
-        for book in books:
-            tags = book.find_all('a', href=True)
-            for t in tags:
-#                print(t)
-                link = url + '/' + t['href']
-#                print(link)
-                links.append(link)
-        links = list(set(links))
-
-        #### visit each book page and get product description
-        product_info = {}
-        for l in tqdm(links):
-            response = requests.get(l)
-            if response.status_code == 200:
-#                print(response.url)
-#                quit()
-                d = {}
-                
-                #### parse content
-                soup = BeautifulSoup(response.text, 'html.parser')
-                
-                #### get book title
-                d['title'] = soup.find('title').string
-                
-                #### get product description
-                #### get all <p> tags
-                tags = soup.find_all('p')
-                for t in tags:
-                    if not t.attrs:
-                        d['description'] = t.string
-                
-                #### get price and universal product code
-                table = soup.find('table', class_="table table-striped")
-                tags = table.find_all('tr')
-                for t in tags:
-                    #### get price
-                    if t.find('th').string == 'Price (excl. tax)':
-                        d['price'] = t.find('td').string
-                    #### use universal product code as unique key for 
-                    #### each book
-                    if t.find('th').string == 'UPC':
-                        product_info[t.find('td').string] = d
-            else:
-                print(response.status_code)
-    else:
-        #### print status code if request was unsuccessful
+    if response.status_code != 200: 
         print(response.status_code)
+        quit()
+        
+        #### parse html content
+    soup = BeautifulSoup(response.text, 'html.parser')
+#    print(soup)
+#    quit()
+
+    #### get book page links
+    books = soup.find_all('article', class_='product_pod')
+    links = []
+    for book in books:
+        tags = book.find_all('a', href=True)
+        for t in tags:
+#            print(t)
+            link = url + '/' + t['href']
+#            print(link)
+            links.append(link)
+    links = list(set(links))
+
+    #### visit each book page and get product description
+    product_info = {}
+    for l in tqdm(links):
+        response = requests.get(l)
+        if response.status_code != 200:
+            print(response.status_code)
+            quit()
+
+        d = {}
+        
+        #### parse content
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        #### get book title
+        d['title'] = soup.find('title').string
+        
+        #### get product description
+        #### get all <p> tags
+        tags = soup.find_all('p')
+        for t in tags:
+            if not t.attrs:
+                d['description'] = t.string
+        
+        #### get price and universal product code
+        table = soup.find('table', class_="table table-striped")
+        tags = table.find_all('tr')
+        for t in tags:
+            #### get price
+            if t.find('th').string == 'Price (excl. tax)':
+                d['price'] = t.find('td').string
+            #### use universal product code as unique key for 
+            #### each book
+            if t.find('th').string == 'UPC':
+                product_info[t.find('td').string] = d
 
     return product_info
         
